@@ -29,7 +29,7 @@ class SPAN(QMainWindow,span_gui.Ui_MainWindow):
         self.flabel = np.arange(self.CHUNK/2)*self.RATE/float(self.CHUNK)
         self.audioOBJ = pyaudio.PyAudio()
         
-        self.stream = self.audioOBJ.open(format=self.FORMAT, channels=self.CHANNELS, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
+        self.stream = self.audioOBJ.open(format=self.FORMAT, channels=self.CHANNELS,input_device_index = 1, rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
         self.total_data=[0 for i in range(self.MAX_PLOT_SIZE)]
         
         self.buttonStart.clicked.connect(self.startRec)
@@ -102,9 +102,13 @@ class SPAN(QMainWindow,span_gui.Ui_MainWindow):
          
          self.timer.stop()
          
+         
          index = self.comboFilterType.currentIndex()
          f1 = int(self.lineFilterCutoff.text())
-         f2 = int(self.lineFilterCutoff_2.text())
+         if self.lineFilterCutoff_2.text()=='':
+             f2=0
+         else:
+             f2 = int(self.lineFilterCutoff_2.text())
          if f1 > self.RATE/2:
              f1 = 1000
              self.lineFilterCutoff.setText(str(f1))
